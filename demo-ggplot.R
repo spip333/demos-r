@@ -17,5 +17,3 @@ p <- ggplot(mydata, aes(months, values))
 
 p <- ggplot(mydata, aes(months, values))
 p +geom_bar(stat = "identity")
-
-

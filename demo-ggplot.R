@@ -2,6 +2,8 @@
 # Sample ggplot
 # N. Stern, 06.12.2018
 ##################################################
+library(ggplot2)
+
 months <-rep(c("jan", "feb", "mar", "apr", "may", "jun", 
                "jul", "aug", "sep", "oct", "nov", "dec"), 2)
 chickens <-c(1, 2, 3, 3, 3, 4, 5, 4, 3, 4, 2, 2)
@@ -15,5 +17,5 @@ p <- ggplot(mydata, aes(months, values))
 # won't work
 # p +geom_bar()
 
-p <- ggplot(mydata, aes(months, values))
 p +geom_bar(stat = "identity")
+

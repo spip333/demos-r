@@ -1,0 +1,49 @@
+---
+title: "example-hyper"
+author: "Nicolas Stern"
+date: "2 décembre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Beispiel deskriptive Statistik
+### Hypergeometrische Verteilung
+#### Beispiel 1
+
+Referenz: https://www.youtube.com/watch?v=L2KMttDm3aY
+
+In einer Urne liegen 20 Bälle, 14 Gelb und 6 Rote. Was ist die Wahrscheinlichkeit, dass eine Stichprobe aus 5 Bälle besteht aus genau 4 Rote und 1 Gelbe?
+
+N: Anzahl der Elemente in der Grundgesamtheit: 20 
+M: Anzahl der Elemente, die für uns günstig sind: 6
+n: Grösse der Stichprobe: 5
+k: Anzahl der Elemente aus M, die in n enthalten sind: 4
+
+1. Berechnung gem. Formel: 
+```{r}
+choose (6, 4)*choose (14, 1) / choose(20, 5)
+```
+N.B: choose (20,5) = total Anz. Mögliche Kombinationen aus 5 Bälle
+2. Berechnung mit dypher()
+```{r}
+dhyper (x=4, m=6, n=14, k=5)
+```
+
+#### Beispiel 2
+Poker wird mit 52 Karten gespielt, jeweils 13 Karten der Farben ♥, ♦, ♣ und ♠.  Bei der Variante Five-Card-Stud erhält jeder Spieler 5 Karten zufällig zugeteilt.
+
+Wie gross ist die Wahrscheinlichkeit, dass der Spieler ein Flush (5 Karten derselben Farbe) erhält?
+
+N: Anzahl der Elemente in der Grundgesamtheit: 52
+M: Anzahl der Elemente, die für uns günstig sind : 13
+n: Grösse der Stichprobe : 5 
+k: Anzahl der Elemente aus M, die in n enthalten sind : 5
+Formel in R: choose (M, k) x choose (N-M, n-k) / choose(N,n)
+```{r}
+choose (13, 5)*choose (39, 0) / choose(52, 5)
+dhyper (x=5, m=13, n=39, k=5)
+```
+

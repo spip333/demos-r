@@ -14,3 +14,4 @@ legend("topright", inset=.05, title="Verteilungen",
 # Bestimmen Sie das 2:5%- und das 97:5%-Perzentil der Studentschen t-Verteilung mit Freiheitsgrad 5.
 
 qt(c(0.025, 0.975), df=5)
+

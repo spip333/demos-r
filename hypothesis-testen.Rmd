@@ -1,0 +1,51 @@
+---
+title: "Test d'hypothèse"
+author: "Nicolas Stern"
+date: "20 décembre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Test d'hypothèse : explication
+Il s'agit de vérifier si la distribution de la taille d'une population correspond à une répartition normale. Pour celà, on utilise le je de données "survey". 
+
+Application aux sujets mâles:
+```{r}
+grosse <- survey[survey$Sex == "Male",]$Height
+grosse <- as.numeric(na.omit(grosse))
+qqnorm(grosse)
+qqline(grosse)
+jarque.test(grosse)
+# h0 (groesse der maenner is normal verteilt) wird nicht verworfen
+install.packages("car")```
+
+
+
+# qqplot der koerpergroessen
+grosse <- survey[survey$Sex == "Male",]$Height
+grosse <- as.numeric(na.omit(grosse))
+qqnorm(grosse)
+qqline(grosse)
+jarque.test(grosse)
+# h0 (groesse der maenner is normal verteilt) wird nicht verworfen
+install.packages("car")
+
+taille <- survey %>% 
+  filter(Sex=="Male") %>%
+  pull(Height) %>%
+  na.omit()
+
+taille
+grosse
+
+class(taille)
+length(taille)
+
+for (n in 1:length(taille)){
+  print (taille[n])
+}
+
+paste(, "....", grosse[n])

@@ -1,0 +1,58 @@
+---
+title: "confidence-intervall"
+author: "Nicolas Stern"
+date: "27 décembre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Calculating a confidence intervall
+
+cf https://www.cyclismo.org/tutorial/R/confidence.html#id2
+
+## Calculating a confidence intervall from a normal distribution
+Here we will look at a fictitious example. We will make some assumptions for what we might find in an experiment and find the resulting confidence interval using a normal distribution.
+
+Let's assume :
+
+- sample mean is 5
+
+- the standard deviation is 2
+
+- the sample size is 20. 
+
+In the example below w"e will use a 95% confidence level and wish to find the confidence interval. 
+
+The commands to find the confidence interval in R are the following:
+```{r}
+a <- 5
+s <- 2
+n <- 20
+error <- qnorm(0.975)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+```
+## Calculating a confidence intervall from a t distribution
+
+```{r}
+a <- 5
+s <- 2
+n <- 20
+error <- qt(0.975,df=n-1)*s/sqrt(n)
+left <- a-error
+right <- a+error
+left
+right
+```
+
+## the easy way: using t.test
+```{r}
+x = c(9.0,9.5,9.6,10.2,11.6)
+t.test(x)
+```
+
+

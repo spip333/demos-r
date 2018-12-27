@@ -8,44 +8,165 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+```{r echo=FALSE}
+library(MASS)
+library(dplyr)
+library(TeachingDemos)
+```
 
-# Test d'hypothèse : explication
-Il s'agit de vérifier si la distribution de la taille d'une population correspond à une répartition normale. Pour celà, on utilise le je de données "survey". 
+# Test d'hypothèse: 
 
-Application aux sujets mâles:
+## exemple 1 (jeu de données "quine")
+
+- Est-ce que la proportion de femmes est identique selon qu'ils soient aborigène ou non dans une population donnée.
+
 ```{r}
-grosse <- survey[survey$Sex == "Male",]$Height
-grosse <- as.numeric(na.omit(grosse))
-qqnorm(grosse)
-qqline(grosse)
-jarque.test(grosse)
-# h0 (groesse der maenner is normal verteilt) wird nicht verworfen
-install.packages("car")```
+head(quine)
+
+# D'abord on crée une table des propriétés étudiées 
+tbl <- table(quine$Eth, quine$Sex)
+
+tbl 
+
+# NB: Le nombre de degrés de liberté est 1 : df = (nbre. de lignes- 1) * (nombre de colonnes - 1)
+
+prop.test(tbl, correct = F)
+?prop.test
+```
+
+- Conclusion : H0 (proportion des genres identique) n'est pas réfutée. 
+
+- p-value: quelle est la probabilité de trouver une répartition donnée.
 
 
+## Exemple 2 (jeu de données "immer")
 
-# qqplot der koerpergroessen
-grosse <- survey[survey$Sex == "Male",]$Height
-grosse <- as.numeric(na.omit(grosse))
-qqnorm(grosse)
-qqline(grosse)
-jarque.test(grosse)
-# h0 (groesse der maenner is normal verteilt) wird nicht verworfen
-install.packages("car")
+-  y a-t-il eu changement dans le volume des récoltes de deux années consécutives 
 
-taille <- survey %>% 
-  filter(Sex=="Male") %>%
-  pull(Height) %>%
-  na.omit()
+```{r}
+head(immer)
 
-taille
-grosse
+t.test(immer$Y1, immer$Y2, paired = T)
+```
 
-class(taille)
-length(taille)
+Si les données sont paired, on peut aussi calculer le t-test sur la différence. Le résultat est identique.
 
-for (n in 1:length(taille)){
-  print (taille[n])
-}
+```{r ex2bis}
+t.test(immer$Y1 - immer$Y2)
+```
 
-paste(, "....", grosse[n])
+Intervalle de confiance de 95% pour une différence:
+
+```{r ex2ter}
+middle <- mean(immer$Y1) - mean(immer$Y2)
+```
+
+# Exemple 3 (jeu de données mtcars)
+-Les voitures à transmission automatique consomment-elles plus que les autres?
+
+```{r}
+head(mtcars)
+
+cars.auto <- mtcars %>% 
+  filter (am==0)
+
+cars.man <- mtcars %>%
+    filter(am==1)
+
+# alternative pour le filtrage des données
+cars2.auto <- mtcars[mtcars$am==0,]$mpg
+cars2.manual <- mtcars[mtcars$am==1,]$mpg
+```
+
+Test d'hypothèse: h0: pas de différence dans la consommation entre les deux types de véhicules:
+
+```{r}
+t.test(cars.auto$mpg, cars.man$mpg)
+
+# alternative (ne fonctionne pas, véfifier)
+# t.test(mpg~am, data = mtcars$mpg)
+```
+
+# Exemple 4 : Linksseitiges Test des Mittlewert $\mu$, $\sigma$ bekannt
+
+- Durée de vie de lampes (Library teachingdemos)
+
+- cf. CAS-DA-RTests-teil-1
+
+- Problem: Ein Hersteller von Glühbirnen behauptet eine Mindestlebensdauer von 10000 Stunden für seine Glühbirnen. Der Mittelwert einer Stichprobe aus 30 Glühbirnen ergab einen Stichprobenmittelwert von 9900 Stunden. Die Standardabweichung der Population beträgt 120 Stunden. Können wir bei einem Signifikanzniveau von 5% die Behauptung des Herstellers verwerfen?
+
+```{r}
+xbar <- 9900 # stichproben mittlewert
+mu0 <- 10000 # Wert im NullHypothese
+sigma <- 120 # Standardabweichung der Population
+n <- 30 # Stichprobengroesse
+sem <- sigma/sqrt(n) # standardfehler des mittlewerts : ca. 21.9
+z <- (xbar-mu0) / sem # testgroess z-wert: ca. -4.56
+# d.h. : resultat ist 4.56 zu tief.
+
+# 5 % alle auf einer Seite: -> graph
+qnorm(0.05)
+
+# pwert:
+pval <- pnorm(z)
+pval
+
+# pval mit z.test:
+z.test(x=9900, mu=10000, stdev=120, n=30, alternative = "less") 
+# d.h. 5 % ist bei 9936. Da 10000 sind nicht im bereich der 95 %, kann man nullhypothese verwerwen
+
+# 3 args. fuer h0 verwerfen:
+# 1. z sehr gross
+# 2. p-value sehr klein
+# 3. 10000 nicht in 95 % intervall
+```
+
+# Exemple 5 : Rechtsseitiges Test des Mittelwerte $\mu$, $\sigma$ bekannt
+- cf. CAS-DA-RTests-teil-1
+
+- Problem: Ein Produzent von Keksen behauptet, dass seine Produkte ein Höchstanteil an gesättigten Fettsäuren von 2 g pro Keks enthalten. In einer Stichprobe von 35 Keksen wurde ein Mittelwert von 2:1 g gemessen. Nehmen Sie eine Standardabweichung von 0:25 g an. Kann die Behauptung bei einem  Signifikanzniveau von 5% verworfen werden?
+
+```{r}
+xbar <- 2.1 # stichproben mittlewert
+mu0 <- 2.0 # Wert im NullHypothese
+sigma <- 0.25 # Standardabweichung der Population
+n <- 35 # Stichprobengroesse
+sem <- sigma/sqrt(n) # standardfehler des mittlewerts : ca. 0.04
+z <- (xbar-mu0) / sem # testgroess z-wert: ca. 2.3
+z.critical <- qnorm(1 - 0.05) # ca 1.6
+z > z.critical # TRUE => H0 wird verworfen
+```
+ - alternative : 
+
+```{r}
+pvalue <- pnorm(z, lower.tail = F) # pwert: : ca 0.00898
+pvalue 
+pvalue < 0.05  # TRUE => H0 wird verworfen
+```
+
+
+# Exemple : test de substance sur des rats
+- https://www.youtube.com/watch?v=-FtlH4svqx4
+- Soit un échantillon de 100 rats auxquels on a administré une substance. Leur temps de réaction moyen à un stimulus est de 1.05 sec. Le temps moyen de réaction sans substance est de 1.2 sec. 
+Hypothèse zero: la substance n'a pas d'effet
+Hypothèse alternative : la substance a un effet.
+Si H0 est vraie: quelle est la probabilité d'obtenir ces données? -> p-value
+
+La déviation standard de l'échantillon est de 0.5
+
+```{r}
+xbar <- 1.2 # stichproben mittlewert
+mu0 <- 1.05 # Wert im NullHypothese
+# sigma : unknown # Standardabweichung der Population, is close to Standardabweichung der Stichprobe wenn n sehr gross
+s <- 0.5  # Standardabweichung der Stichprobe, is close to Standardabweichung der Population
+n <- 100 # Stichprobengroesse
+
+# standardfehler des mittlewerts : 
+sem <- sigma/sqrt(n)
+sem
+z <- (xbar-mu0) / sem # testgroess z-wert:
+z
+
+z.test(x=1.05, mu=1.2, stdev=0.5, n=100, conf.level=0.95, alternative = "two.sided") 
+```
+1.2 n'est pas dans l'intervalle de confiance de 95 % => H0 peut être rejetée. (TODO: Pas sûr!)

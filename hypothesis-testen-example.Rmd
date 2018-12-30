@@ -1,0 +1,75 @@
+---
+title: "Example Hypothesis Testing"
+author: "Nicolas Stern"
+date: "30 décembre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Hypothesis testing
+
+- How to test a two-sided hypothesis based on sample data.
+- Source : https://www.youtube.com/watch?v=vw2IPZ2aD-c
+
+- Given the following values, let's calculate the test value using t-statistics to assess our hypothesis:
+    - H$_{0}$ :  $\mu$ = 100
+
+    - H$_{a}$ :  $\mu$ != 100
+
+```{r}
+xbar <- 104 # sample mean
+mu <- 100 # hypothetical population mean
+n <- 35 # sample size
+s <- 12 # sample standard deviation
+
+# Calculate the test value
+t <- (xbar - mu) / (s / sqrt(n))
+t
+```
+We use a t-distribution, NOT the normal distribution, since we are working with sample data. 
+
+T-distribution is different from the normal distribution (although only very slightly). Let's compare both curves. For the t-distribution, we use a value of 34 degrees of freedom (n-1):
+
+```{r}
+ndata <- seq(-3, 3, by=0.1)
+npoints <- dnorm(ndata)
+tpoints <- dt(ndata, df=34)
+plot(npoints, type="l", col="blue")
+lines(tpoints, col="red")
+```
+
+Let's further examine this difference : let's calculate the probabilities using the t-distribution for the given t-value: 
+
+probability using the t-distribution: 
+
+```{r}
+pt(t, df=n-1, lower.tail = F) * 2
+```
+We multiply by 2 to cover the total area under the curve (on the right of the t-value, AND on the left of -t-value).
+
+Compare it with the normal distribution:
+
+```{r}
+pnorm(t, lower.tail = F) * 2
+```
+Now, using the t-distribution, let's examinate our hypothesis. We will reject  H$_{0}$ if the t-value we calculated  (`r t`) is greater than a critical value (on the right side) or smaller (on the left side).
+
+Let's calculate the critical value for a 5 % significance level:
+```{r}
+alpha <- 0.05
+talpha <- qt(1-alpha/2, df = n-1, lower.tail = T)
+talpha
+```
+Since the t-value is smaller than  the critical value, we have no evidence against H$_{0}$.
+
+We could also compare our p-value with the significance level : the greater the p-value, the stronger the evidence against  H$_{0}$. The significance level `r alpha` is a cutoff for significance.
+
+```{r}
+p.value <- pt(t, df=24, lower.tail = F) * 2
+p.value
+p.value > alpha
+```
+Since the p-value is greater than alpha, the evidence against H$_{0}$ is not significant.

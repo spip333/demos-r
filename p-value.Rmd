@@ -1,0 +1,33 @@
+---
+title: "p-value"
+author: "Nicolas Stern"
+date: "27 décembre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Calculating p-value
+
+cf https://www.cyclismo.org/tutorial/R/pValues.html
+
+## Calculating a p-value from a normal distribution
+
+Let's assume :
+
+- sample mean is 5
+
+- the standard deviation is 2
+
+- the sample size is 20. 
+
+```{r}
+a <- 5
+s <- 2
+n <- 20
+xbar <- 7
+z <- (xbar-a)/(s/sqrt(n))
+z
+2*pnorm(-abs(z))
+```

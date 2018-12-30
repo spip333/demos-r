@@ -73,3 +73,29 @@ p.value
 p.value > alpha
 ```
 Since the p-value is greater than alpha, the evidence against H$_{0}$ is not significant.
+
+
+# Second example: dehydration effect on reaction time
+
+h0: mu = 0.95
+ha: mu != 0.95
+
+```{r}
+mu <- 0.95
+n <- 25
+xbar <- 1
+s <- 0.18
+t <- (xbar - mu) / (s / sqrt(n))
+t
+p.val <- pt(t, df=24, lower.tail = F) * 2
+p.val
+alpha <- 0.05
+p.val > alpha # when true: we have no strong evidence against h0
+```
+
+- compare t-value against critical value
+```{r}
+crit.val <- qt(p=1-alpha, df=24)
+crit.val
+t > crit.val # when false: we have no strong evidence against h0
+```

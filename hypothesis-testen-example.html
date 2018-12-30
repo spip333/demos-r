@@ -160,7 +160,7 @@ lines(tpoints, col=&quot;red&quot;)</code></pre>
 <p>probability using the t-distribution:</p>
 <pre class="r"><code>pt(t, df=n-1, lower.tail = F) * 2</code></pre>
 <pre><code>## [1] 0.05678589</code></pre>
-<p>We multiplicate by 2 to cover the total area on the right of the t-value, AND on the left of -t-value.</p>
+<p>We multiply by 2 to cover the total area under the curve (on the right of the t-value, AND on the left of -t-value).</p>
 <p>Compare it with the normal distribution:</p>
 <pre class="r"><code>pnorm(t, lower.tail = F) * 2</code></pre>
 <pre><code>## [1] 0.04860657</code></pre>
@@ -178,6 +178,31 @@ p.value</code></pre>
 <pre class="r"><code>p.value &gt; alpha</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <p>Since the p-value is greater than alpha, the evidence against H<span class="math inline">\(_{0}\)</span> is not significant.</p>
+</div>
+<div id="second-example-dehydration-effect-on-reaction-time" class="section level1">
+<h1>Second example: dehydration effect on reaction time</h1>
+<p>h0: mu = 0.95 ha: mu != 0.95</p>
+<pre class="r"><code>mu &lt;- 0.95
+n &lt;- 25
+xbar &lt;- 1
+s &lt;- 0.18
+t &lt;- (xbar - mu) / (s / sqrt(n))
+t</code></pre>
+<pre><code>## [1] 1.388889</code></pre>
+<pre class="r"><code>p.val &lt;- pt(t, df=24, lower.tail = F) * 2
+p.val</code></pre>
+<pre><code>## [1] 0.1776215</code></pre>
+<pre class="r"><code>alpha &lt;- 0.05
+p.val &gt; alpha # when true: we have no strong evidence against h0</code></pre>
+<pre><code>## [1] TRUE</code></pre>
+<ul>
+<li>compare t-value against critical value</li>
+</ul>
+<pre class="r"><code>crit.val &lt;- qt(p=1-alpha, df=24)
+crit.val</code></pre>
+<pre><code>## [1] 1.710882</code></pre>
+<pre class="r"><code>t &gt; crit.val # when false: we have no strong evidence against h0</code></pre>
+<pre><code>## [1] FALSE</code></pre>
 </div>
 
 

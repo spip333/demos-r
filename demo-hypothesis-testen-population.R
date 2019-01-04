@@ -23,17 +23,17 @@ z.val <- (p - p0 )/sqrt (p0 * (1-p0) / n)
 # krit. wert:
 z.alpha <- qnorm(alpha)
 
-# h0 wird nicht verworfen wenn z.value < crit. wert
+# h0 wird verworfen wenn z.val < z.alpha
 z.val < z.alpha
-# h0 wird verworfen
+# h0 wird behalten
 
-# alternativ: berechnung von p-val:
 
+# alternative : p-wert mit Signifikanzniveau vergleichen:
 p.val <- pnorm(z.val)
 
-# h0 wird verworfen wenn p-value > alpha
-p.val > alpha
-
+# h0 wird verworfen wenn p-val < alpha
+p.val < alpha
+# h0 wird behalten
 
 # ############################################
 # Rechtsseitiger Test des Populationsanteils p

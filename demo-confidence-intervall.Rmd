@@ -55,4 +55,24 @@ x = c(9.0,9.5,9.6,10.2,11.6)
 t.test(x)
 ```
 
+```{r}
+rm(list = ls())
+```
+
+## the example in the exam 2016: confidence interval of a sample
+- Die Auswertung einer Stichprobe der Grösse n = 100 ergab ¯ x = 34.25 und s = 7.5. Bestimmen Sie ein 95%-Konﬁdenzintervall für den Populationsmittelwe
+```{r}
+n <- 100
+s <- 7.5
+xbar <- 34.25
+se <- s/sqrt(n)
+alpha <- 0.05
+
+err <- qt( (1-alpha/2), df = n-1) * se
+err
+
+int <- c(xbar - err, xbar + err)
+int
+```
+
 

@@ -128,8 +128,11 @@ $(document).ready(function () {
 </div>
 
 
-<div id="calculating-a-confidence-intervall-from-a-normal-distribution" class="section level1">
-<h1>Calculating a confidence intervall from a normal distribution</h1>
+<div id="calculating-a-confidence-intervall" class="section level1">
+<h1>Calculating a confidence intervall</h1>
+<p>cf <a href="https://www.cyclismo.org/tutorial/R/confidence.html#id2" class="uri">https://www.cyclismo.org/tutorial/R/confidence.html#id2</a></p>
+<div id="calculating-a-confidence-intervall-from-a-normal-distribution" class="section level2">
+<h2>Calculating a confidence intervall from a normal distribution</h2>
 <p>Here we will look at a fictitious example. We will make some assumptions for what we might find in an experiment and find the resulting confidence interval using a normal distribution.</p>
 <p>Let’s assume :</p>
 <ul>
@@ -150,8 +153,8 @@ left</code></pre>
 <pre class="r"><code>right</code></pre>
 <pre><code>## [1] 5.876523</code></pre>
 </div>
-<div id="calculating-a-confidence-intervall-from-a-t-distribution" class="section level1">
-<h1>Calculating a confidence intervall from a t distribution</h1>
+<div id="calculating-a-confidence-intervall-from-a-t-distribution" class="section level2">
+<h2>Calculating a confidence intervall from a t distribution</h2>
 <pre class="r"><code>a &lt;- 5
 s &lt;- 2
 n &lt;- 20
@@ -162,6 +165,42 @@ left</code></pre>
 <pre><code>## [1] 4.063971</code></pre>
 <pre class="r"><code>right</code></pre>
 <pre><code>## [1] 5.936029</code></pre>
+</div>
+<div id="the-easy-way-using-t.test" class="section level2">
+<h2>the easy way: using t.test</h2>
+<pre class="r"><code>x = c(9.0,9.5,9.6,10.2,11.6)
+t.test(x)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  x
+## t = 22.294, df = 4, p-value = 2.397e-05
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##   8.737095 11.222905
+## sample estimates:
+## mean of x 
+##      9.98</code></pre>
+<pre class="r"><code>rm(list = ls())</code></pre>
+</div>
+<div id="the-example-in-the-exam-2016-confidence-interval-of-a-sample" class="section level2">
+<h2>the example in the exam 2016: confidence interval of a sample</h2>
+<ul>
+<li>Die Auswertung einer Stichprobe der Grösse n = 100 ergab ¯ x = 34.25 und s = 7.5. Bestimmen Sie ein 95%-Konﬁdenzintervall für den Populationsmittelwe</li>
+</ul>
+<pre class="r"><code>n &lt;- 100
+s &lt;- 7.5
+xbar &lt;- 34.25
+se &lt;- s/sqrt(n)
+alpha &lt;- 0.05
+
+err &lt;- qt( (1-alpha/2), df = n-1) * se
+err</code></pre>
+<pre><code>## [1] 1.488163</code></pre>
+<pre class="r"><code>int &lt;- c(xbar - err, xbar + err)
+int</code></pre>
+<pre><code>## [1] 32.76184 35.73816</code></pre>
+</div>
 </div>
 
 

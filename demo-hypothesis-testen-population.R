@@ -94,3 +94,36 @@ p.val <- 2*pnorm(z.val, lower.tail = F)
 # h0 beibehalten wenn p.val > signifikanzniveau
 p.val > alpha
 # H0 wird nicht verworfen
+
+###############################################################
+# Aufgabe: Zweiseitiger Test des Populationsanteils p
+# Aufgabe: Der Anteil der Rechtshänder unter den Studierenden von survey wird auf 90% geschätzt.
+# Lässt sich diese Behauptung bei einem Signiﬁkanzniveau von 1% verwerfen
+# h0 : mu = 0.9
+# ha : mu != 0.9
+
+# ref: 3.4
+# 
+rm (list = ls())
+
+library (MASS)
+head(survey)
+
+alpha <- 0.01
+n <- nrow(survey)
+n.right <- nrow(survey[survey$W.Hnd == "Right",])
+p0 <- 0.9
+pbar <- n.right / n
+
+# 1. z.value mit krit. werte vergleichen
+z.val <- (pbar - p0) / sqrt(p0*(1-p0)/n)
+krit.unten <- qnorm(alpha/2) 
+krit.oben <- qnorm(1-alpha/2) 
+
+z.val < krit.oben && z.val > krit.unten # true, h0 kann behalten werden
+
+# 2. p-value mit signifikanz
+p.val <- pnorm(z.val, lower=F)*2
+p.val > alpha # true, h0 kann behalten werden
+
+# 
